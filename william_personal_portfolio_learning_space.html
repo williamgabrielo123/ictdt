@@ -1,0 +1,1373 @@
+<!DOCTYPE html>
+<html lang="id" class="dark scroll-smooth">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>William - Personal Portfolio & Learning Space</title>
+  
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          colors: {
+            brand: {
+              50: '#f0f7ff',
+              100: '#e0effe',
+              500: '#0284c7',
+              600: '#0369a1',
+              700: '#075985',
+              900: '#0c4a6e',
+            }
+          }
+        }
+      }
+    }
+  </script>
+
+  <style>
+    ::-webkit-scrollbar {
+      width: 8px;
+      height: 8px;
+    }
+    .dark ::-webkit-scrollbar-track {
+      background: #0f172a;
+    }
+    .dark ::-webkit-scrollbar-thumb {
+      background: #334155;
+      border-radius: 4px;
+    }
+    ::-webkit-scrollbar-track {
+      background: #f1f5f9;
+    }
+    ::-webkit-scrollbar-thumb {
+      background: #cbd5e1;
+      border-radius: 4px;
+    }
+
+    .gradient-text {
+      background: linear-gradient(135deg, #0284c7 0%, #6366f1 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+    .dark .gradient-text {
+      background: linear-gradient(135deg, #38bdf8 0%, #818cf8 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    html {
+      scroll-padding-top: 5rem;
+    }
+  </style>
+</head>
+<body class="bg-slate-50 dark:bg-slate-950 text-slate-800 dark:text-slate-100 min-h-screen flex flex-col font-sans antialiased selection:bg-cyan-500 selection:text-white transition-colors duration-300">
+
+  <!-- Toast Notification Container -->
+  <div id="toast-container" class="fixed bottom-5 right-5 z-50 flex flex-col gap-3 pointer-events-none"></div>
+
+  <!-- STICKY HEADER / NAVBAR -->
+  <header class="sticky top-0 z-40 backdrop-blur-md bg-white/90 dark:bg-slate-900/90 border-b border-slate-200 dark:border-slate-800/80 shadow-sm transition-colors duration-300">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
+      
+      <!-- Logo & Brand -->
+      <a href="#tentang" class="flex items-center gap-3 group flex-shrink-0">
+        <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-cyan-500 to-blue-600 flex items-center justify-center text-white font-black text-xl shadow-lg shadow-cyan-500/20 group-hover:scale-105 transition-transform">
+          W
+        </div>
+        <div>
+          <h1 id="site-logo-title" class="font-bold text-base sm:text-lg text-slate-900 dark:text-white leading-tight">William</h1>
+          <p id="site-logo-subtitle" class="text-[11px] text-slate-500 dark:text-slate-400 font-medium">Portfolio & Learning Space • 9C</p>
+        </div>
+      </a>
+
+      <!-- Navigation Links -->
+      <nav class="hidden md:flex items-center gap-6 text-xs font-semibold tracking-wide text-slate-600 dark:text-slate-300">
+        <a href="#tentang" class="hover:text-cyan-500 dark:hover:text-cyan-400 transition-colors">Tentang</a>
+        <a href="#proyek" class="hover:text-cyan-500 dark:hover:text-cyan-400 transition-colors">Daftar Proyek</a>
+        <a href="#statistik" class="hover:text-cyan-500 dark:hover:text-cyan-400 transition-colors">Statistik</a>
+        <a href="#kontak" class="hover:text-cyan-500 dark:hover:text-cyan-400 transition-colors">Kontak</a>
+      </nav>
+
+      <!-- Actions, Theme Switcher & Admin Status -->
+      <div class="flex items-center gap-2 sm:gap-3">
+        <!-- Theme Toggle Button -->
+        <button id="theme-toggle-btn" onclick="toggleTheme()" aria-label="Ganti Mode Tema" title="Ganti Mode Terang/Gelap" class="p-2 rounded-xl bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-cyan-400 border border-slate-200 dark:border-slate-700 hover:bg-slate-200 dark:hover:bg-slate-700 transition-all flex items-center justify-center">
+          <svg id="theme-icon-moon" class="w-5 h-5 hidden" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z" />
+          </svg>
+          <svg id="theme-icon-sun" class="w-5 h-5 hidden" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z" />
+          </svg>
+        </button>
+
+        <!-- Admin Control Panel Trigger Button (Visible when logged in) -->
+        <button id="admin-panel-trigger" onclick="openAdminPanel()" class="hidden items-center gap-1.5 px-3 py-1.5 rounded-xl bg-gradient-to-r from-emerald-500 to-teal-600 hover:from-emerald-600 hover:to-teal-700 text-white text-xs font-semibold shadow-md transition-all">
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z" />
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+          </svg>
+          <span>Admin Panel</span>
+        </button>
+
+        <!-- Admin Login / Logout Button -->
+        <button id="auth-btn" onclick="toggleAuthModal()" class="flex items-center gap-2 px-3.5 py-2 rounded-xl bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-200 border border-slate-300 dark:border-slate-700 text-xs sm:text-sm font-medium transition-all">
+          <svg id="auth-icon-login" class="w-4 h-4 text-cyan-500 dark:text-cyan-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 16l-4-4m0 0l4-4m-4 4h14m-5 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h7a3 3 0 013 3v1" />
+          </svg>
+          <span id="auth-btn-text">Admin Login</span>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- Hero Banner Section -->
+  <section id="tentang" class="relative py-12 px-4 sm:px-6 lg:px-8 bg-gradient-to-b from-white to-slate-100 dark:from-slate-900 dark:to-slate-950 border-b border-slate-200 dark:border-slate-800/50 transition-colors duration-300">
+    <div class="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-3 gap-8 items-center">
+      <div class="md:col-span-2 space-y-4">
+        <div id="hero-badge" class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-cyan-500/10 border border-cyan-500/30 text-cyan-600 dark:text-cyan-400 text-xs font-semibold">
+          ✨ Showcase Proyek & Portofolio Personal William
+        </div>
+        <h2 id="hero-headline" class="text-3xl sm:text-4xl font-extrabold text-slate-900 dark:text-white tracking-tight">
+          Karya & Modul Pembelajaran Web William
+        </h2>
+        <p id="hero-description" class="text-slate-600 dark:text-slate-400 text-sm sm:text-base leading-relaxed">
+          Selamat datang di ruang kerja personal saya. Jelajahi dokumen proyek, profil student athlete, dan pameran antarmuka web interaktif karya William.
+        </p>
+      </div>
+
+      <!-- Quick Stats Card -->
+      <div id="statistik" class="bg-white/90 dark:bg-slate-900/90 border border-slate-200 dark:border-slate-800 rounded-2xl p-6 shadow-xl space-y-4">
+        <h3 class="text-sm font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wider">Statistik Platform</h3>
+        <div class="grid grid-cols-2 gap-4">
+          <div class="bg-slate-100 dark:bg-slate-800/60 p-4 rounded-xl border border-slate-200 dark:border-slate-700/50">
+            <p id="stat-class" class="text-2xl font-bold text-cyan-600 dark:text-cyan-400">9C</p>
+            <p class="text-xs text-slate-500 dark:text-slate-400 mt-1">Kelas Aktif</p>
+          </div>
+          <div class="bg-slate-100 dark:bg-slate-800/60 p-4 rounded-xl border border-slate-200 dark:border-slate-700/50">
+            <p id="stat-layout" class="text-2xl font-bold text-emerald-600 dark:text-emerald-400">3 Kolom</p>
+            <p class="text-xs text-slate-500 dark:text-slate-400 mt-1">Layout Aktif</p>
+          </div>
+        </div>
+        <div class="pt-2 border-t border-slate-200 dark:border-slate-800 flex items-center justify-between text-xs text-slate-500 dark:text-slate-400">
+          <span>Status CMS Admin:</span>
+          <span id="cms-status-indicator" class="text-amber-600 dark:text-amber-400 font-medium">Mode Pengunjung (Read-Only)</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Main Content Grid -->
+  <main id="proyek" class="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-10">
+    <!-- Header Projects & Sticky Filter Bar -->
+    <div class="sticky top-16 z-30 py-4 bg-slate-50/95 dark:bg-slate-950/95 backdrop-blur-md border-b border-slate-200/80 dark:border-slate-800/80 mb-8 transition-colors">
+      <div class="flex flex-col md:flex-row md:items-center justify-between gap-4">
+        <div>
+          <h3 class="text-xl font-bold text-slate-900 dark:text-white flex items-center gap-2">
+            <span>Daftar Proyek & Portfolio Karya</span>
+            <span class="text-xs font-normal text-slate-500 dark:text-slate-400 bg-slate-200 dark:bg-slate-800 px-2.5 py-1 rounded-md border border-slate-300 dark:border-slate-700" id="project-count">0 Proyek</span>
+          </h3>
+          <p class="text-xs text-slate-500 dark:text-slate-400 mt-1">Gunakan filter di bawah untuk memilih kategori proyek atau buka Admin Panel untuk mengubah layout.</p>
+        </div>
+
+        <!-- Filter Pills & Admin Quick Controls -->
+        <div class="flex flex-wrap items-center gap-2">
+          <div class="flex flex-wrap gap-1.5" id="filter-container">
+            <button type="button" onclick="filterProjects('all', this)" class="filter-btn active px-3.5 py-1.5 rounded-full text-xs font-semibold bg-cyan-500 text-white border border-cyan-400 transition-all">Semua Proyek</button>
+            <button type="button" onclick="filterProjects('student', this)" class="filter-btn px-3.5 py-1.5 rounded-full text-xs font-semibold bg-white dark:bg-slate-800 hover:bg-slate-100 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-300 border border-slate-300 dark:border-slate-700 transition-all">Profil William 9C</button>
+            <button type="button" onclick="filterProjects('lms', this)" class="filter-btn px-3.5 py-1.5 rounded-full text-xs font-semibold bg-white dark:bg-slate-800 hover:bg-slate-100 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-300 border border-slate-300 dark:border-slate-700 transition-all">Learning Space</button>
+            <button type="button" onclick="filterProjects('code', this)" class="filter-btn px-3.5 py-1.5 rounded-full text-xs font-semibold bg-white dark:bg-slate-800 hover:bg-slate-100 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-300 border border-slate-300 dark:border-slate-700 transition-all">Web Coding</button>
+          </div>
+
+          <!-- Admin Quick Action Buttons -->
+          <div id="admin-quick-actions" class="hidden items-center gap-2">
+            <button type="button" onclick="openAddProjectModal()" class="flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-gradient-to-r from-cyan-500 to-blue-600 hover:from-cyan-600 hover:to-blue-700 text-white font-semibold text-xs shadow-md transition-all">
+              <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/></svg>
+              <span>+ Tambah</span>
+            </button>
+            <button type="button" onclick="openAdminPanel()" class="px-3 py-1.5 rounded-full bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border border-emerald-500/30 hover:bg-emerald-500 hover:text-white font-semibold text-xs transition-all">
+              ⚡ Layout Admin
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Projects Grid Container (Dynamic Columns via Config) -->
+    <div id="projects-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 transition-all duration-300">
+      <!-- Dynamic Project Cards Rendered via JS -->
+    </div>
+  </main>
+
+  <!-- Footer -->
+  <footer id="kontak" class="mt-auto bg-white dark:bg-slate-900 border-t border-slate-200 dark:border-slate-800 py-8 text-center text-xs text-slate-500 dark:text-slate-400 transition-colors duration-300">
+    <div class="max-w-7xl mx-auto px-4 space-y-3">
+      <div class="flex flex-wrap items-center justify-center gap-6 font-medium text-slate-600 dark:text-slate-300">
+        <a href="#tentang" class="hover:text-cyan-500 transition-colors">Tentang William</a>
+        <a href="#proyek" class="hover:text-cyan-500 transition-colors">Daftar Proyek</a>
+        <a href="#statistik" class="hover:text-cyan-500 transition-colors">Statistik Platform</a>
+      </div>
+      <p id="footer-text">© 2026 William • Personal Portfolio & Learning Space (Mutiara Bangsa 2 School)</p>
+    </div>
+  </footer>
+
+  <!-- ==================== MODALS & ADMIN PANEL ==================== -->
+
+  <!-- 1. FULL ADMIN CONTROL PANEL DRAWER/MODAL -->
+  <div id="admin-panel-modal" class="fixed inset-0 z-50 hidden items-center justify-center p-3 sm:p-6 bg-slate-950/80 backdrop-blur-md transition-all duration-300">
+    <div class="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-3xl w-full max-w-5xl max-h-[90vh] flex flex-col overflow-hidden shadow-2xl relative text-slate-900 dark:text-white">
+      
+      <!-- Admin Panel Header -->
+      <div class="px-6 py-4 border-b border-slate-200 dark:border-slate-800 bg-slate-100 dark:bg-slate-950/80 flex items-center justify-between">
+        <div class="flex items-center gap-3">
+          <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-emerald-500 to-teal-600 flex items-center justify-center text-white shadow-lg shadow-emerald-500/20">
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 4a2 2 0 114 0v1a2 2 0 01-2 2 2 2 0 01-2-2V4zM4 7a2 2 0 012-2h12a2 2 0 012 2v12a2 2 0 01-2 2H6a2 2 0 01-2-2V7z" />
+            </svg>
+          </div>
+          <div>
+            <h3 class="text-lg font-extrabold flex items-center gap-2">
+              <span>Admin Layout & Card Management Panel</span>
+              <span class="text-[10px] bg-emerald-500/20 text-emerald-600 dark:text-emerald-400 border border-emerald-500/30 px-2 py-0.5 rounded-full font-semibold">Aktif</span>
+            </h3>
+            <p class="text-xs text-slate-500 dark:text-slate-400">Atur tata letak kolom grid, ubah isi kartu, urutan kartu, dan teks platform.</p>
+          </div>
+        </div>
+
+        <button type="button" onclick="closeAdminPanel()" class="p-2 rounded-xl text-slate-400 hover:text-slate-700 dark:hover:text-white hover:bg-slate-200 dark:hover:bg-slate-800 transition-all">
+          <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+          </svg>
+        </button>
+      </div>
+
+      <!-- Admin Panel Tabs Header -->
+      <div class="px-6 py-2 border-b border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-900 flex items-center gap-2 overflow-x-auto text-xs font-semibold">
+        <button type="button" id="tab-btn-cards" onclick="switchAdminTab('cards')" class="px-4 py-2 rounded-xl bg-cyan-500 text-white shadow transition-all">
+          🎴 Kelola Kartu Proyek (<span id="admin-card-count-badge">0</span>)
+        </button>
+        <button type="button" id="tab-btn-layout" onclick="switchAdminTab('layout')" class="px-4 py-2 rounded-xl bg-slate-200 dark:bg-slate-800 text-slate-700 dark:text-slate-300 hover:bg-slate-300 dark:hover:bg-slate-700 transition-all">
+          ⚙️ Layout Grid & Desain
+        </button>
+        <button type="button" id="tab-btn-content" onclick="switchAdminTab('content')" class="px-4 py-2 rounded-xl bg-slate-200 dark:bg-slate-800 text-slate-700 dark:text-slate-300 hover:bg-slate-300 dark:hover:bg-slate-700 transition-all">
+          📝 Teks Banner & Platform
+        </button>
+      </div>
+
+      <!-- Admin Panel Body Container -->
+      <div class="flex-1 overflow-y-auto p-6 space-y-6">
+
+        <!-- TAB 1: KELOLA KARTU PROYEK -->
+        <div id="admin-tab-cards" class="space-y-4">
+          <div class="flex flex-wrap items-center justify-between gap-3 bg-slate-100 dark:bg-slate-950 p-4 rounded-2xl border border-slate-200 dark:border-slate-800">
+            <div>
+              <h4 class="text-sm font-bold">Daftar & Susunan Kartu Saat Ini</h4>
+              <p class="text-xs text-slate-500 dark:text-slate-400">Klik 'Edit' untuk mengubah data kartu, atau gunakan panah untuk mengatur urutan posisi kartu pada layout.</p>
+            </div>
+            <div class="flex items-center gap-2">
+              <button type="button" onclick="openAddProjectModal()" class="px-3.5 py-2 rounded-xl bg-cyan-500 hover:bg-cyan-600 text-white text-xs font-semibold transition-all shadow">
+                + Tambah Kartu Baru
+              </button>
+              <button type="button" onclick="resetProjectsToDefault()" title="Reset Data Standar" class="p-2 rounded-xl bg-slate-200 dark:bg-slate-800 hover:bg-rose-500 hover:text-white text-slate-600 dark:text-slate-300 transition-all">
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"/></svg>
+              </button>
+            </div>
+          </div>
+
+          <!-- Cards Table / Reorder List -->
+          <div id="admin-cards-list" class="space-y-3">
+            <!-- Dynamic Card Item Rows -->
+          </div>
+        </div>
+
+        <!-- TAB 2: LAYOUT GRID & DESAIN -->
+        <div id="admin-tab-layout" class="hidden space-y-6">
+          <div class="bg-slate-50 dark:bg-slate-950 p-5 rounded-2xl border border-slate-200 dark:border-slate-800 space-y-4">
+            <h4 class="text-sm font-bold text-slate-900 dark:text-white flex items-center gap-2">
+              <span>Pengaturan Grid Layout Kartu</span>
+            </h4>
+            <p class="text-xs text-slate-500 dark:text-slate-400">Pilih berapa banyak kolom kartu yang ingin ditampilkan pada layar dekstop.</p>
+            
+            <div class="grid grid-cols-2 sm:grid-cols-4 gap-3">
+              <button type="button" onclick="updateLayoutColumns(1)" id="col-btn-1" class="p-4 rounded-xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900 text-center hover:border-cyan-500 transition-all">
+                <p class="text-lg font-bold">1 Kolom</p>
+                <p class="text-[10px] text-slate-500">Full Width List</p>
+              </button>
+              <button type="button" onclick="updateLayoutColumns(2)" id="col-btn-2" class="p-4 rounded-xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900 text-center hover:border-cyan-500 transition-all">
+                <p class="text-lg font-bold">2 Kolom</p>
+                <p class="text-[10px] text-slate-500">Medium Split</p>
+              </button>
+              <button type="button" onclick="updateLayoutColumns(3)" id="col-btn-3" class="p-4 rounded-xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900 text-center hover:border-cyan-500 transition-all">
+                <p class="text-lg font-bold">3 Kolom</p>
+                <p class="text-[10px] text-slate-500">Standar Responsive</p>
+              </button>
+              <button type="button" onclick="updateLayoutColumns(4)" id="col-btn-4" class="p-4 rounded-xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900 text-center hover:border-cyan-500 transition-all">
+                <p class="text-lg font-bold">4 Kolom</p>
+                <p class="text-[10px] text-slate-500">Compact Dashboard</p>
+              </button>
+            </div>
+          </div>
+
+          <!-- Card Corner Roundness & Hover Effect Customizer -->
+          <div class="bg-slate-50 dark:bg-slate-950 p-5 rounded-2xl border border-slate-200 dark:border-slate-800 space-y-4">
+            <h4 class="text-sm font-bold text-slate-900 dark:text-white">Gaya Lengkungan Sudut Kartu (Border Radius)</h4>
+            <div class="grid grid-cols-3 gap-3">
+              <button type="button" onclick="updateCardRadius('rounded-lg')" class="p-3 rounded-lg border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900 text-xs font-semibold text-center hover:border-cyan-500">
+                Lengkung Ringan (rounded-lg)
+              </button>
+              <button type="button" onclick="updateCardRadius('rounded-2xl')" class="p-3 rounded-2xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900 text-xs font-semibold text-center hover:border-cyan-500">
+                Modern Standard (rounded-2xl)
+              </button>
+              <button type="button" onclick="updateCardRadius('rounded-3xl')" class="p-3 rounded-3xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900 text-xs font-semibold text-center hover:border-cyan-500">
+                Super Rounded (rounded-3xl)
+              </button>
+            </div>
+          </div>
+
+          <!-- Backup / Export Import Config Data -->
+          <div class="bg-slate-50 dark:bg-slate-950 p-5 rounded-2xl border border-slate-200 dark:border-slate-800 space-y-3">
+            <h4 class="text-sm font-bold text-slate-900 dark:text-white">Cadangkan & Salin Konfigurasi Data (JSON)</h4>
+            <div class="flex flex-wrap gap-3">
+              <button type="button" onclick="exportDataJSON()" class="px-4 py-2 rounded-xl bg-slate-200 dark:bg-slate-800 hover:bg-slate-300 text-xs font-semibold transition-all">
+                📥 Export JSON Data
+              </button>
+              <button type="button" onclick="importDataJSONPrompt()" class="px-4 py-2 rounded-xl bg-slate-200 dark:bg-slate-800 hover:bg-slate-300 text-xs font-semibold transition-all">
+                📤 Import JSON Data
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <!-- TAB 3: TEKS BANNER & PLATFORM -->
+        <div id="admin-tab-content" class="hidden space-y-4">
+          <form onsubmit="handleSaveSiteContent(event)" class="space-y-4">
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div>
+                <label class="block text-xs font-semibold mb-1">Nama Platform / Logo Title</label>
+                <input type="text" id="edit-logo-title" required class="w-full px-3.5 py-2.5 rounded-xl bg-slate-50 dark:bg-slate-950 border border-slate-300 dark:border-slate-700 text-sm focus:border-cyan-500 focus:outline-none" />
+              </div>
+              <div>
+                <label class="block text-xs font-semibold mb-1">Subtitle Brand / Sub-Logo</label>
+                <input type="text" id="edit-logo-subtitle" required class="w-full px-3.5 py-2.5 rounded-xl bg-slate-50 dark:bg-slate-950 border border-slate-300 dark:border-slate-700 text-sm focus:border-cyan-500 focus:outline-none" />
+              </div>
+            </div>
+
+            <div>
+              <label class="block text-xs font-semibold mb-1">Teks Badge Hero Top Banner</label>
+              <input type="text" id="edit-hero-badge" required class="w-full px-3.5 py-2.5 rounded-xl bg-slate-50 dark:bg-slate-950 border border-slate-300 dark:border-slate-700 text-sm focus:border-cyan-500 focus:outline-none" />
+            </div>
+
+            <div>
+              <label class="block text-xs font-semibold mb-1">Judul Utama Hero Banner (Headline)</label>
+              <input type="text" id="edit-hero-headline" required class="w-full px-3.5 py-2.5 rounded-xl bg-slate-50 dark:bg-slate-950 border border-slate-300 dark:border-slate-700 text-sm focus:border-cyan-500 focus:outline-none" />
+            </div>
+
+            <div>
+              <label class="block text-xs font-semibold mb-1">Deskripsi Utama Hero Banner</label>
+              <textarea id="edit-hero-desc" rows="3" required class="w-full px-3.5 py-2.5 rounded-xl bg-slate-50 dark:bg-slate-950 border border-slate-300 dark:border-slate-700 text-sm focus:border-cyan-500 focus:outline-none"></textarea>
+            </div>
+
+            <button type="submit" class="px-5 py-2.5 rounded-xl bg-emerald-500 hover:bg-emerald-600 text-white font-semibold text-xs transition-all shadow">
+              Simpan Teks Platform
+            </button>
+          </form>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+  <!-- 2. ADMIN LOGIN MODAL -->
+  <div id="login-modal" class="fixed inset-0 z-50 hidden items-center justify-center p-4 bg-slate-950/70 backdrop-blur-sm transition-all duration-200">
+    <div class="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl w-full max-w-md p-6 shadow-2xl relative text-slate-900 dark:text-white">
+      <button type="button" onclick="closeLoginModal()" aria-label="Tutup Modal Login" class="absolute top-4 right-4 text-slate-400 hover:text-slate-700 dark:hover:text-white p-2 rounded-xl hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors">
+        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+        </svg>
+      </button>
+
+      <div class="text-center mb-6">
+        <div class="w-12 h-12 bg-cyan-500/10 border border-cyan-500/30 text-cyan-500 dark:text-cyan-400 rounded-xl flex items-center justify-center mx-auto mb-3">
+          <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
+          </svg>
+        </div>
+        <h3 class="text-xl font-bold">Portal Admin William</h3>
+        <p class="text-xs text-slate-500 dark:text-slate-400 mt-1">Gunakan akun admin untuk membuka panel pengeditan layout.</p>
+      </div>
+
+      <div id="login-error-alert" class="hidden mb-4 p-3 rounded-xl bg-rose-500/10 border border-rose-500/30 text-rose-500 dark:text-rose-400 text-xs flex items-center gap-2">
+        <svg class="w-4 h-4 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+        <span>Username atau password salah!</span>
+      </div>
+
+      <form id="admin-login-form" onsubmit="handleAdminLogin(event)" class="space-y-4">
+        <div>
+          <label class="block text-xs font-semibold text-slate-700 dark:text-slate-300 mb-1.5">Username Admin</label>
+          <input type="text" id="login-username" required placeholder="admin atau william" class="w-full px-3.5 py-2.5 rounded-xl bg-slate-50 dark:bg-slate-950 border border-slate-300 dark:border-slate-700 text-slate-900 dark:text-white placeholder-slate-400 text-sm focus:outline-none focus:border-cyan-500 transition-all" />
+        </div>
+
+        <div>
+          <label class="block text-xs font-semibold text-slate-700 dark:text-slate-300 mb-1.5">Password</label>
+          <div class="relative">
+            <input type="password" id="login-password" required placeholder="admin123" class="w-full px-3.5 py-2.5 rounded-xl bg-slate-50 dark:bg-slate-950 border border-slate-300 dark:border-slate-700 text-slate-900 dark:text-white placeholder-slate-400 text-sm focus:outline-none focus:border-cyan-500 transition-all pr-10" />
+            <button type="button" onclick="togglePasswordVisibility()" class="absolute right-3 top-2.5 text-slate-400 hover:text-slate-600 dark:hover:text-slate-200">
+              <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/></svg>
+            </button>
+          </div>
+        </div>
+
+        <button type="submit" class="w-full py-2.5 px-4 rounded-xl bg-gradient-to-r from-cyan-500 to-blue-600 hover:from-cyan-600 hover:to-blue-700 text-white font-semibold text-sm shadow-lg shadow-cyan-500/25 transition-all">
+          Masuk Sebagai Admin
+        </button>
+      </form>
+    </div>
+  </div>
+
+  <!-- 3. SCREENSHOT LIGHTBOX MODAL -->
+  <div id="screenshot-modal" class="fixed inset-0 z-50 hidden items-center justify-center p-3 sm:p-6 bg-slate-950/80 backdrop-blur-md transition-all duration-300">
+    <div class="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl w-full max-w-5xl max-h-[92vh] flex flex-col overflow-hidden shadow-2xl relative text-slate-900 dark:text-white">
+      <div class="px-5 py-4 border-b border-slate-200 dark:border-slate-800 flex items-center justify-between bg-slate-50 dark:bg-slate-900/90">
+        <div class="flex items-center gap-3">
+          <div class="p-2 rounded-lg bg-cyan-500/10 border border-cyan-500/30 text-cyan-500 dark:text-cyan-400">
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"/></svg>
+          </div>
+          <div>
+            <h3 id="modal-project-title" class="text-base sm:text-lg font-bold">Pratinjau Screenshot Layout</h3>
+            <p id="modal-project-category" class="text-xs text-slate-500 dark:text-slate-400">Kategori • Student Athlete UI</p>
+          </div>
+        </div>
+
+        <button type="button" onclick="closeScreenshotModal()" class="p-2 rounded-xl text-slate-400 hover:text-slate-700 dark:hover:text-white hover:bg-slate-200 dark:hover:bg-slate-800 transition-all">
+          <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
+        </button>
+      </div>
+
+      <div class="flex-1 overflow-y-auto p-4 sm:p-6 space-y-6">
+        <div class="relative rounded-xl border border-slate-200 dark:border-slate-800 bg-slate-100 dark:bg-slate-950 overflow-hidden shadow-inner group">
+          <div class="bg-slate-200 dark:bg-slate-900 px-4 py-2 border-b border-slate-300 dark:border-slate-800 flex items-center justify-between text-xs text-slate-500 dark:text-slate-400">
+            <div class="flex items-center gap-1.5">
+              <span class="w-3 h-3 rounded-full bg-rose-500/80 inline-block"></span>
+              <span class="w-3 h-3 rounded-full bg-amber-500/80 inline-block"></span>
+              <span class="w-3 h-3 rounded-full bg-emerald-500/80 inline-block"></span>
+              <span class="ml-2 font-mono text-[11px] text-slate-500 hidden sm:inline" id="modal-mock-url">https://william.sch.id/student/profile-9c</span>
+            </div>
+            <span class="text-[11px] bg-white dark:bg-slate-800 px-2 py-0.5 rounded text-cyan-600 dark:text-cyan-400 font-semibold">Live Preview</span>
+          </div>
+
+          <div id="modal-preview-content" class="p-4 sm:p-8 min-h-[300px] flex items-center justify-center"></div>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+          <div class="md:col-span-2 space-y-3">
+            <h4 class="text-sm font-semibold text-slate-800 dark:text-slate-200">Deskripsi Detail Proyek:</h4>
+            <p id="modal-project-desc" class="text-sm text-slate-600 dark:text-slate-400 leading-relaxed"></p>
+            <div id="modal-tags-container" class="flex flex-wrap gap-2 pt-2"></div>
+          </div>
+
+          <div class="bg-slate-50 dark:bg-slate-950 p-4 rounded-xl border border-slate-200 dark:border-slate-800 space-y-3">
+            <h4 class="text-xs font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wider">Informasi Teknis</h4>
+            <div class="text-xs space-y-2 text-slate-600 dark:text-slate-400">
+              <div class="flex justify-between">
+                <span>Pemilik Karya:</span>
+                <span class="text-slate-900 dark:text-slate-200 font-medium" id="modal-author">William (9C)</span>
+              </div>
+              <div class="flex justify-between">
+                <span>Status Modul:</span>
+                <span class="text-emerald-600 dark:text-emerald-400 font-medium">Selesai / Terverifikasi</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 4. ADD / EDIT PROJECT MODAL -->
+  <div id="project-form-modal" class="fixed inset-0 z-50 hidden items-center justify-center p-4 bg-slate-950/70 backdrop-blur-sm">
+    <div class="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl w-full max-w-lg p-6 shadow-2xl relative text-slate-900 dark:text-white">
+      <button type="button" onclick="closeProjectFormModal()" class="absolute top-4 right-4 text-slate-400 hover:text-slate-700 dark:hover:text-white p-1 rounded-lg">
+        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
+      </button>
+
+      <h3 id="form-modal-title" class="text-lg font-bold mb-4">Tambah Proyek Karya William</h3>
+
+      <form onsubmit="handleSaveProject(event)" class="space-y-4">
+        <input type="hidden" id="form-edit-id" value="" />
+
+        <div>
+          <label class="block text-xs font-medium text-slate-700 dark:text-slate-300 mb-1">Judul Proyek / Card Title</label>
+          <input type="text" id="form-title" required placeholder="Dokumen Utama Portofolio" class="w-full px-3 py-2 rounded-lg bg-slate-50 dark:bg-slate-950 border border-slate-300 dark:border-slate-700 text-slate-900 dark:text-white text-sm focus:border-cyan-500 focus:outline-none" />
+        </div>
+
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+          <div>
+            <label class="block text-xs font-medium text-slate-700 dark:text-slate-300 mb-1">Penulis / Pemilik</label>
+            <input type="text" id="form-author" required placeholder="William (Kelas 9C)" class="w-full px-3 py-2 rounded-lg bg-slate-50 dark:bg-slate-950 border border-slate-300 dark:border-slate-700 text-slate-900 dark:text-white text-sm focus:border-cyan-500 focus:outline-none" />
+          </div>
+          <div>
+            <label class="block text-xs font-medium text-slate-700 dark:text-slate-300 mb-1">Kategori Filter</label>
+            <select id="form-category" class="w-full px-3 py-2 rounded-lg bg-slate-50 dark:bg-slate-950 border border-slate-300 dark:border-slate-700 text-slate-900 dark:text-white text-sm focus:border-cyan-500 focus:outline-none">
+              <option value="student">Profil William 9C</option>
+              <option value="lms">Learning Space</option>
+              <option value="code">Web Coding</option>
+            </select>
+          </div>
+        </div>
+
+        <div>
+          <label class="block text-xs font-medium text-slate-700 dark:text-slate-300 mb-1">Tautan Direct / Link URL Karya</label>
+          <input type="url" id="form-link" placeholder="https://docs.google.com/..." class="w-full px-3 py-2 rounded-lg bg-slate-50 dark:bg-slate-950 border border-slate-300 dark:border-slate-700 text-slate-900 dark:text-white text-sm focus:border-cyan-500 focus:outline-none" />
+        </div>
+
+        <div>
+          <label class="block text-xs font-medium text-slate-700 dark:text-slate-300 mb-1">Teks Tombol Tautan</label>
+          <input type="text" id="form-link-text" placeholder="Buka Google Docs / Buka Tautan Karya" class="w-full px-3 py-2 rounded-lg bg-slate-50 dark:bg-slate-950 border border-slate-300 dark:border-slate-700 text-slate-900 dark:text-white text-sm focus:border-cyan-500 focus:outline-none" />
+        </div>
+
+        <div>
+          <label class="block text-xs font-medium text-slate-700 dark:text-slate-300 mb-1">Deskripsi Singkat Kartu</label>
+          <textarea id="form-desc" rows="3" required class="w-full px-3 py-2 rounded-lg bg-slate-50 dark:bg-slate-950 border border-slate-300 dark:border-slate-700 text-slate-900 dark:text-white text-sm focus:border-cyan-500 focus:outline-none"></textarea>
+        </div>
+
+        <div>
+          <label class="block text-xs font-medium text-slate-700 dark:text-slate-300 mb-1">Tags (Pisahkan koma)</label>
+          <input type="text" id="form-tags" placeholder="Google Docs, Kelas 9C, ICT Project" class="w-full px-3 py-2 rounded-lg bg-slate-50 dark:bg-slate-950 border border-slate-300 dark:border-slate-700 text-slate-900 dark:text-white text-sm focus:border-cyan-500 focus:outline-none" />
+        </div>
+
+        <button type="submit" id="form-submit-btn" class="w-full py-2.5 px-4 rounded-xl bg-cyan-500 hover:bg-cyan-600 text-white font-semibold text-sm transition-all shadow-lg shadow-cyan-500/20">
+          Simpan Data Proyek
+        </button>
+      </form>
+    </div>
+  </div>
+
+  <!-- ==================== JAVASCRIPT LOGIC ==================== -->
+  <script>
+    let isAdminLoggedIn = false;
+    let currentFilter = 'all';
+    let projectsData = [];
+    
+    // Configurable Layout Settings
+    let siteConfig = {
+      gridCols: 3, // 1, 2, 3, or 4 columns
+      cardRadius: 'rounded-2xl', // rounded-lg, rounded-2xl, rounded-3xl
+      logoTitle: 'William',
+      logoSubtitle: 'Portfolio & Learning Space • 9C',
+      heroBadge: '✨ Showcase Proyek & Portofolio Personal William',
+      heroHeadline: 'Karya & Modul Pembelajaran Web William',
+      heroDescription: 'Selamat datang di ruang kerja personal saya. Jelajahi dokumen proyek, profil student athlete, dan pameran antarmuka web interaktif karya William.'
+    };
+
+    // Default Initial Data
+    const DEFAULT_PROJECTS = [
+      {
+        id: 'proj-1',
+        title: 'Dokumen Utama Portofolio — William',
+        category: 'student',
+        categoryLabel: 'Profil William 9C',
+        badgeColor: 'bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border-emerald-500/30',
+        author: 'William (Kelas 9C)',
+        description: 'Tautan langsung ke Google Docs dokumen utama portofolio dan laporan karya milik William.',
+        link: 'https://docs.google.com/document/d/1Q-fUkFJk9360WknKTfSsQDJtkX4II4CfleExBg0UxXE/edit?tab=t.0',
+        linkText: 'Buka Google Docs',
+        tags: ['Google Docs', 'Dokumen Utuh', 'Kelas 9C', 'William Project']
+      },
+      {
+        id: 'proj-2',
+        title: 'Profil Siswa & Student Athlete 9C — William',
+        category: 'student',
+        categoryLabel: 'Profil William 9C',
+        badgeColor: 'bg-cyan-500/10 text-cyan-600 dark:text-cyan-400 border-cyan-500/30',
+        author: 'William (Kelas 9C)',
+        description: 'Layout profil interaktif khusus untuk William. Menampilkan hobi olahraga (Futsal, Basket, Lari) serta impian karir sebagai Pemain Sepak Bola Profesional.',
+        tags: ['Student Athlete', 'Kelas 9C', 'Responsive UI', 'Hobi & Karir']
+      },
+      {
+        id: 'proj-3',
+        title: 'William Learning Space & Student Tasks Portal',
+        category: 'lms',
+        categoryLabel: 'Learning Space',
+        badgeColor: 'bg-purple-500/10 text-purple-600 dark:text-purple-400 border-purple-500/30',
+        author: 'William (Kelas 9C)',
+        description: 'Portal pengerjaan modul pembelajaran ICT William untuk pemantauan tugas, modul coding, dan penyelesaian tugas harian.',
+        link: 'https://ictcodehub.web.id/student/tasks',
+        linkText: 'Buka Portal Tasks',
+        tags: ['Learning Space', 'Tugas ICT', 'Tailwind', 'Personal Hub']
+      }
+    ];
+
+    function showToast(message, type = 'info') {
+      const container = document.getElementById('toast-container');
+      if (!container) return;
+
+      const toast = document.createElement('div');
+      const bgColors = {
+        success: 'bg-emerald-600 text-white',
+        error: 'bg-rose-600 text-white',
+        info: 'bg-slate-900 dark:bg-slate-800 text-white border border-slate-700'
+      };
+
+      toast.className = `pointer-events-auto px-4 py-3 rounded-xl shadow-xl text-xs font-semibold flex items-center gap-2 transform transition-all duration-300 translate-y-2 opacity-0 ${bgColors[type] || bgColors.info}`;
+      toast.innerHTML = `<span>${message}</span>`;
+
+      container.appendChild(toast);
+
+      setTimeout(() => {
+        toast.classList.remove('translate-y-2', 'opacity-0');
+      }, 50);
+
+      setTimeout(() => {
+        toast.classList.add('opacity-0', 'translate-y-2');
+        setTimeout(() => toast.remove(), 300);
+      }, 3000);
+    }
+
+    function loadStorageData() {
+      try {
+        const storedProjects = localStorage.getItem('william_projects_data');
+        if (storedProjects) {
+          projectsData = JSON.parse(storedProjects);
+        } else {
+          projectsData = JSON.parse(JSON.stringify(DEFAULT_PROJECTS));
+          saveProjectsToStorage();
+        }
+
+        const storedConfig = localStorage.getItem('william_site_config');
+        if (storedConfig) {
+          siteConfig = { ...siteConfig, ...JSON.parse(storedConfig) };
+        }
+      } catch (e) {
+        console.error('Failed to parse localStorage', e);
+        projectsData = JSON.parse(JSON.stringify(DEFAULT_PROJECTS));
+      }
+    }
+
+    function saveProjectsToStorage() {
+      try {
+        localStorage.setItem('william_projects_data', JSON.stringify(projectsData));
+      } catch (e) {
+        console.error('Failed to save projects to localStorage', e);
+      }
+    }
+
+    function saveConfigToStorage() {
+      try {
+        localStorage.setItem('william_site_config', JSON.stringify(siteConfig));
+      } catch (e) {
+        console.error('Failed to save config to localStorage', e);
+      }
+    }
+
+    function resetProjectsToDefault() {
+      if (confirm('Apakah Anda yakin ingin mengembalikan seluruh data kartu ke standar bawaan?')) {
+        projectsData = JSON.parse(JSON.stringify(DEFAULT_PROJECTS));
+        saveProjectsToStorage();
+        renderProjects();
+        renderAdminCardsList();
+        showToast('Data kartu dikembalikan ke standar bawaan', 'info');
+      }
+    }
+
+    function filterProjects(category, btnElement) {
+      currentFilter = category;
+
+      const filterBtns = document.querySelectorAll('#filter-container .filter-btn');
+      filterBtns.forEach(btn => {
+        btn.classList.remove('bg-cyan-500', 'text-white', 'border-cyan-400', 'active');
+        btn.classList.add('bg-white', 'dark:bg-slate-800', 'text-slate-700', 'dark:text-slate-300', 'border-slate-300', 'dark:border-slate-700');
+      });
+
+      if (btnElement) {
+        btnElement.classList.remove('bg-white', 'dark:bg-slate-800', 'text-slate-700', 'dark:text-slate-300', 'border-slate-300', 'dark:border-slate-700');
+        btnElement.classList.add('bg-cyan-500', 'text-white', 'border-cyan-400', 'active');
+      }
+
+      renderProjects();
+    }
+
+    function toggleTheme() {
+      const html = document.documentElement;
+      const moonIcon = document.getElementById('theme-icon-moon');
+      const sunIcon = document.getElementById('theme-icon-sun');
+
+      if (html.classList.contains('dark')) {
+        html.classList.remove('dark');
+        localStorage.setItem('theme', 'light');
+        if (moonIcon) moonIcon.classList.remove('hidden');
+        if (sunIcon) sunIcon.classList.add('hidden');
+      } else {
+        html.classList.add('dark');
+        localStorage.setItem('theme', 'dark');
+        if (moonIcon) moonIcon.classList.add('hidden');
+        if (sunIcon) sunIcon.classList.remove('hidden');
+      }
+    }
+
+    function initTheme() {
+      const savedTheme = localStorage.getItem('theme');
+      const moonIcon = document.getElementById('theme-icon-moon');
+      const sunIcon = document.getElementById('theme-icon-sun');
+
+      if (savedTheme === 'light') {
+        document.documentElement.classList.remove('dark');
+        if (moonIcon) moonIcon.classList.remove('hidden');
+        if (sunIcon) sunIcon.classList.add('hidden');
+      } else {
+        document.documentElement.classList.add('dark');
+        if (moonIcon) moonIcon.classList.add('hidden');
+        if (sunIcon) sunIcon.classList.remove('hidden');
+      }
+    }
+
+    function toggleAuthModal() {
+      if (isAdminLoggedIn) {
+        isAdminLoggedIn = false;
+        closeAdminPanel();
+        updateAdminUI();
+        showToast('Anda telah keluar dari Mode Admin', 'info');
+      } else {
+        const modal = document.getElementById('login-modal');
+        if (modal) {
+          modal.classList.remove('hidden');
+          modal.classList.add('flex');
+        }
+      }
+    }
+
+    function closeLoginModal() {
+      const modal = document.getElementById('login-modal');
+      if (modal) {
+        modal.classList.add('hidden');
+        modal.classList.remove('flex');
+      }
+      const errAlert = document.getElementById('login-error-alert');
+      if (errAlert) errAlert.classList.add('hidden');
+    }
+
+    function handleAdminLogin(event) {
+      event.preventDefault();
+      const user = document.getElementById('login-username').value.trim();
+      const pass = document.getElementById('login-password').value.trim();
+
+      if ((user === 'admin' && pass === 'admin123') || (user === 'william' && pass === '123456')) {
+        isAdminLoggedIn = true;
+        closeLoginModal();
+        updateAdminUI();
+        openAdminPanel();
+        showToast('Berhasil masuk sebagai Admin!', 'success');
+        document.getElementById('admin-login-form').reset();
+      } else {
+        const errAlert = document.getElementById('login-error-alert');
+        if (errAlert) errAlert.classList.remove('hidden');
+      }
+    }
+
+    function togglePasswordVisibility() {
+      const passInput = document.getElementById('login-password');
+      if (passInput) {
+        passInput.type = passInput.type === 'password' ? 'text' : 'password';
+      }
+    }
+
+    function updateAdminUI() {
+      const authBtnText = document.getElementById('auth-btn-text');
+      const cmsStatus = document.getElementById('cms-status-indicator');
+      const adminQuickActions = document.getElementById('admin-quick-actions');
+      const adminTrigger = document.getElementById('admin-panel-trigger');
+
+      if (isAdminLoggedIn) {
+        if (authBtnText) authBtnText.innerText = 'Keluar Admin';
+        if (cmsStatus) {
+          cmsStatus.innerText = 'Mode Admin (Full Access)';
+          cmsStatus.className = 'text-emerald-600 dark:text-emerald-400 font-semibold';
+        }
+        if (adminQuickActions) {
+          adminQuickActions.classList.remove('hidden');
+          adminQuickActions.classList.add('flex');
+        }
+        if (adminTrigger) {
+          adminTrigger.classList.remove('hidden');
+          adminTrigger.classList.add('flex');
+        }
+      } else {
+        if (authBtnText) authBtnText.innerText = 'Admin Login';
+        if (cmsStatus) {
+          cmsStatus.innerText = 'Mode Pengunjung (Read-Only)';
+          cmsStatus.className = 'text-amber-600 dark:text-amber-400 font-medium';
+        }
+        if (adminQuickActions) {
+          adminQuickActions.classList.add('hidden');
+          adminQuickActions.classList.remove('flex');
+        }
+        if (adminTrigger) {
+          adminTrigger.classList.add('hidden');
+          adminTrigger.classList.remove('flex');
+        }
+      }
+      renderProjects();
+    }
+
+    function applySiteConfigUI() {
+      // 1. Grid columns layout
+      const grid = document.getElementById('projects-grid');
+      if (grid) {
+        grid.className = `grid gap-6 transition-all duration-300`;
+        if (siteConfig.gridCols === 1) grid.classList.add('grid-cols-1');
+        else if (siteConfig.gridCols === 2) grid.classList.add('grid-cols-1', 'md:grid-cols-2');
+        else if (siteConfig.gridCols === 4) grid.classList.add('grid-cols-1', 'md:grid-cols-2', 'lg:grid-cols-4');
+        else grid.classList.add('grid-cols-1', 'md:grid-cols-2', 'lg:grid-cols-3'); // default 3
+      }
+
+      // Update stat layout label
+      const statLayout = document.getElementById('stat-layout');
+      if (statLayout) statLayout.innerText = `${siteConfig.gridCols || 3} Kolom`;
+
+      // 2. Platform Text Elements
+      const logoTitle = document.getElementById('site-logo-title');
+      if (logoTitle) logoTitle.innerText = siteConfig.logoTitle || 'William';
+
+      const logoSub = document.getElementById('site-logo-subtitle');
+      if (logoSub) logoSub.innerText = siteConfig.logoSubtitle || 'Portfolio & Learning Space • 9C';
+
+      const heroBadge = document.getElementById('hero-badge');
+      if (heroBadge) heroBadge.innerText = siteConfig.heroBadge || '✨ Showcase Proyek';
+
+      const heroHeadline = document.getElementById('hero-headline');
+      if (heroHeadline) heroHeadline.innerText = siteConfig.heroHeadline || 'Karya & Modul William';
+
+      const heroDesc = document.getElementById('hero-description');
+      if (heroDesc) heroDesc.innerText = siteConfig.heroDescription || '';
+    }
+
+    function updateLayoutColumns(cols) {
+      siteConfig.gridCols = cols;
+      saveConfigToStorage();
+      applySiteConfigUI();
+      renderProjects();
+      showToast(`Layout diubah menjadi ${cols} Kolom`, 'success');
+    }
+
+    function updateCardRadius(radiusClass) {
+      siteConfig.cardRadius = radiusClass;
+      saveConfigToStorage();
+      renderProjects();
+      showToast('Gaya sudut kartu berhasil diperbarui', 'success');
+    }
+
+    function renderProjects() {
+      const grid = document.getElementById('projects-grid');
+      if (!grid) return;
+
+      applySiteConfigUI();
+
+      const filtered = projectsData.filter(p => currentFilter === 'all' || p.category === currentFilter);
+      const countLabel = document.getElementById('project-count');
+      if (countLabel) countLabel.innerText = `${filtered.length} Proyek`;
+
+      if (filtered.length === 0) {
+        grid.innerHTML = `
+          <div class="col-span-full py-12 text-center text-slate-500 dark:text-slate-400 bg-white/40 dark:bg-slate-900/40 rounded-2xl border border-slate-200 dark:border-slate-800">
+            <p class="text-sm">Tidak ada proyek dalam kategori ini.</p>
+          </div>
+        `;
+        return;
+      }
+
+      const radiusClass = siteConfig.cardRadius || 'rounded-2xl';
+
+      grid.innerHTML = filtered.map(item => `
+        <div class="group bg-white dark:bg-slate-900 hover:border-cyan-500/50 border border-slate-200 dark:border-slate-800 ${radiusClass} overflow-hidden shadow-md hover:shadow-xl transition-all duration-300 flex flex-col justify-between">
+          <div>
+            <!-- Thumbnail Click -->
+            <div onclick="handleCardClick('${item.id}')" class="relative aspect-video bg-slate-100 dark:bg-slate-950 border-b border-slate-200 dark:border-slate-800/80 cursor-pointer overflow-hidden flex items-center justify-center p-4">
+              <div class="absolute inset-0 bg-gradient-to-t from-slate-900/60 to-transparent z-10 opacity-30 group-hover:opacity-10 transition-opacity"></div>
+              
+              <div class="w-full h-full transform group-hover:scale-105 transition-transform duration-300 flex items-center justify-center">
+                <div class="bg-white/90 dark:bg-slate-900/90 border border-slate-300 dark:border-slate-700/60 rounded-xl p-3 shadow-md max-w-[90%] text-center">
+                  <span class="text-xs font-semibold text-cyan-600 dark:text-cyan-400 block truncate">${item.title}</span>
+                  <span class="text-[10px] text-slate-500 dark:text-slate-400 mt-0.5 block">${item.link ? (item.linkText || 'Buka Link Direct') : 'Pratinjau Screenshot'}</span>
+                </div>
+              </div>
+
+              <div class="absolute inset-0 z-20 flex items-center justify-center opacity-0 group-hover:opacity-100 bg-slate-950/40 backdrop-blur-[2px] transition-all">
+                <span class="px-3.5 py-1.5 rounded-full bg-cyan-500 text-white text-xs font-semibold shadow-lg flex items-center gap-1.5 pointer-events-none">
+                  ${item.link ? `
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"/></svg>
+                    ${item.linkText || 'Buka Link'}
+                  ` : `
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/></svg>
+                    Lihat Pratinjau
+                  `}
+                </span>
+              </div>
+            </div>
+
+            <!-- Content -->
+            <div class="p-5 space-y-3">
+              <div class="flex items-center justify-between gap-2">
+                <span class="px-2.5 py-0.5 rounded-full text-[11px] font-semibold border ${item.badgeColor || 'bg-cyan-500/10 text-cyan-600 dark:text-cyan-400 border-cyan-500/30'}">
+                  ${item.categoryLabel || 'Proyek William'}
+                </span>
+                <span class="text-[11px] text-slate-500 dark:text-slate-400 font-medium">${item.author || 'William (9C)'}</span>
+              </div>
+
+              <h4 class="font-bold text-slate-900 dark:text-slate-100 text-base group-hover:text-cyan-500 transition-colors line-clamp-1">
+                ${item.title}
+              </h4>
+
+              <p class="text-xs text-slate-600 dark:text-slate-400 leading-relaxed line-clamp-2">
+                ${item.description}
+              </p>
+
+              <!-- Tags -->
+              <div class="flex flex-wrap gap-1.5 pt-1">
+                ${(item.tags || []).map(t => `<span class="px-2 py-0.5 rounded bg-slate-100 dark:bg-slate-950 text-slate-600 dark:text-slate-400 text-[10px] border border-slate-200 dark:border-slate-800">${t}</span>`).join('')}
+              </div>
+            </div>
+          </div>
+
+          <!-- Actions -->
+          <div class="p-5 pt-0 border-t border-slate-200 dark:border-slate-800/40 mt-3 flex items-center justify-between gap-2">
+            ${item.link ? `
+              <a href="${item.link}" target="_blank" onclick="event.stopPropagation()" class="flex-1 py-2 px-3 rounded-xl bg-cyan-500 hover:bg-cyan-600 text-white text-xs font-semibold flex items-center justify-center gap-2 transition-all shadow">
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"/></svg>
+                <span>${item.linkText || 'Buka Tautan Karya'}</span>
+              </a>
+            ` : `
+              <button type="button" onclick="event.stopPropagation(); openScreenshotModal('${item.id}')" class="flex-1 py-2 px-3 rounded-xl bg-slate-100 dark:bg-slate-800 hover:bg-cyan-500 hover:text-white text-slate-700 dark:text-slate-300 border border-slate-300 dark:border-slate-700 text-xs font-semibold flex items-center justify-center gap-2 transition-all">
+                <svg class="w-4 h-4 text-cyan-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"/></svg>
+                <span>Lihat Screenshot</span>
+              </button>
+            `}
+
+            ${isAdminLoggedIn ? `
+              <div class="flex items-center gap-1.5 flex-shrink-0">
+                <button type="button" onclick="event.stopPropagation(); openEditProjectModal('${item.id}')" title="Edit Kartu Proyek" class="p-2 rounded-xl bg-cyan-500/10 hover:bg-cyan-500 text-cyan-600 dark:text-cyan-400 hover:text-white border border-cyan-500/30 transition-all flex items-center justify-center">
+                  <svg class="w-4 h-4 pointer-events-none" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
+                  </svg>
+                </button>
+                <button type="button" onclick="event.stopPropagation(); deleteProject('${item.id}')" title="Hapus Kartu" class="p-2 rounded-xl bg-rose-500/10 hover:bg-rose-500 text-rose-500 hover:text-white border border-rose-500/30 transition-all flex items-center justify-center">
+                  <svg class="w-4 h-4 pointer-events-none" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+                  </svg>
+                </button>
+              </div>
+            ` : ''}
+          </div>
+        </div>
+      `).join('');
+    }
+
+    function openAdminPanel() {
+      if (!isAdminLoggedIn) {
+        toggleAuthModal();
+        return;
+      }
+      const modal = document.getElementById('admin-panel-modal');
+      if (modal) {
+        modal.classList.remove('hidden');
+        modal.classList.add('flex');
+        renderAdminCardsList();
+        populateContentForm();
+      }
+    }
+
+    function closeAdminPanel() {
+      const modal = document.getElementById('admin-panel-modal');
+      if (modal) {
+        modal.classList.add('hidden');
+        modal.classList.remove('flex');
+      }
+    }
+
+    function switchAdminTab(tabName) {
+      const tabCards = document.getElementById('admin-tab-cards');
+      const tabLayout = document.getElementById('admin-tab-layout');
+      const tabContent = document.getElementById('admin-tab-content');
+
+      const btnCards = document.getElementById('tab-btn-cards');
+      const btnLayout = document.getElementById('tab-btn-layout');
+      const btnContent = document.getElementById('tab-btn-content');
+
+      const activeClass = ['bg-cyan-500', 'text-white', 'shadow'];
+      const inactiveClass = ['bg-slate-200', 'dark:bg-slate-800', 'text-slate-700', 'dark:text-slate-300'];
+
+      [btnCards, btnLayout, btnContent].forEach(btn => {
+        if (btn) {
+          btn.classList.remove(...activeClass);
+          btn.classList.add(...inactiveClass);
+        }
+      });
+
+      if (tabCards) tabCards.classList.add('hidden');
+      if (tabLayout) tabLayout.classList.add('hidden');
+      if (tabContent) tabContent.classList.add('hidden');
+
+      if (tabName === 'cards') {
+        if (tabCards) tabCards.classList.remove('hidden');
+        if (btnCards) {
+          btnCards.classList.remove(...inactiveClass);
+          btnCards.classList.add(...activeClass);
+        }
+        renderAdminCardsList();
+      } else if (tabName === 'layout') {
+        if (tabLayout) tabLayout.classList.remove('hidden');
+        if (btnLayout) {
+          btnLayout.classList.remove(...inactiveClass);
+          btnLayout.classList.add(...activeClass);
+        }
+      } else if (tabName === 'content') {
+        if (tabContent) tabContent.classList.remove('hidden');
+        if (btnContent) {
+          btnContent.classList.remove(...inactiveClass);
+          btnContent.classList.add(...activeClass);
+        }
+      }
+    }
+
+    function renderAdminCardsList() {
+      const container = document.getElementById('admin-cards-list');
+      const countBadge = document.getElementById('admin-card-count-badge');
+      if (countBadge) countBadge.innerText = projectsData.length;
+
+      if (!container) return;
+
+      if (projectsData.length === 0) {
+        container.innerHTML = `
+          <div class="p-8 text-center text-slate-500 dark:text-slate-400 text-xs bg-slate-100 dark:bg-slate-950 rounded-2xl">
+            Belum ada kartu. Klik '+ Tambah Kartu Baru' untuk membuat kartu pertama.
+          </div>
+        `;
+        return;
+      }
+
+      container.innerHTML = projectsData.map((item, index) => `
+        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 p-4 rounded-2xl bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 hover:border-cyan-500/50 transition-all">
+          <div class="flex items-center gap-3">
+            <span class="w-7 h-7 rounded-lg bg-slate-200 dark:bg-slate-800 font-bold text-xs flex items-center justify-center text-slate-600 dark:text-slate-300">
+              #${index + 1}
+            </span>
+            <div>
+              <h5 class="text-xs font-bold text-slate-900 dark:text-white">${item.title}</h5>
+              <p class="text-[11px] text-slate-500 dark:text-slate-400">${item.categoryLabel || 'Proyek'} • ${item.author || 'William'}</p>
+            </div>
+          </div>
+
+          <!-- Controls: Up, Down, Edit, Duplicate, Delete -->
+          <div class="flex items-center gap-1.5 flex-wrap">
+            <button type="button" onclick="moveCardOrder(${index}, -1)" ${index === 0 ? 'disabled class="opacity-30 cursor-not-allowed p-1.5 rounded-lg bg-slate-200 dark:bg-slate-800 text-slate-500"' : 'class="p-1.5 rounded-lg bg-slate-200 dark:bg-slate-800 hover:bg-cyan-500 hover:text-white text-slate-700 dark:text-slate-300 transition-all"'} title="Pindahkan Ke Atas">
+              <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 15l7-7 7 7"/></svg>
+            </button>
+            <button type="button" onclick="moveCardOrder(${index}, 1)" ${index === projectsData.length - 1 ? 'disabled class="opacity-30 cursor-not-allowed p-1.5 rounded-lg bg-slate-200 dark:bg-slate-800 text-slate-500"' : 'class="p-1.5 rounded-lg bg-slate-200 dark:bg-slate-800 hover:bg-cyan-500 hover:text-white text-slate-700 dark:text-slate-300 transition-all"'} title="Pindahkan Ke Bawah">
+              <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
+            </button>
+            
+            <button type="button" onclick="openEditProjectModal('${item.id}')" class="px-2.5 py-1.5 rounded-xl bg-cyan-500/10 hover:bg-cyan-500 text-cyan-600 dark:text-cyan-400 hover:text-white border border-cyan-500/30 text-xs font-semibold transition-all">
+              Edit
+            </button>
+            <button type="button" onclick="duplicateProject('${item.id}')" class="px-2.5 py-1.5 rounded-xl bg-purple-500/10 hover:bg-purple-500 text-purple-600 dark:text-purple-400 hover:text-white border border-purple-500/30 text-xs font-semibold transition-all">
+              Duplikat
+            </button>
+            <button type="button" onclick="deleteProject('${item.id}')" class="px-2.5 py-1.5 rounded-xl bg-rose-500/10 hover:bg-rose-500 text-rose-500 hover:text-white border border-rose-500/30 text-xs font-semibold transition-all">
+              Hapus
+            </button>
+          </div>
+        </div>
+      `).join('');
+    }
+
+    function moveCardOrder(index, direction) {
+      const targetIndex = index + direction;
+      if (targetIndex < 0 || targetIndex >= projectsData.length) return;
+
+      const temp = projectsData[index];
+      projectsData[index] = projectsData[targetIndex];
+      projectsData[targetIndex] = temp;
+
+      saveProjectsToStorage();
+      renderProjects();
+      renderAdminCardsList();
+      showToast('Urutan posisi kartu diperbarui', 'success');
+    }
+
+    function duplicateProject(id) {
+      const item = projectsData.find(p => p.id === id);
+      if (!item) return;
+
+      const duplicated = JSON.parse(JSON.stringify(item));
+      duplicated.id = 'proj-' + Date.now();
+      duplicated.title = `${item.title} (Salinan)`;
+
+      projectsData.unshift(duplicated);
+      saveProjectsToStorage();
+      renderProjects();
+      renderAdminCardsList();
+      showToast('Kartu berhasil diduplikat', 'success');
+    }
+
+    function populateContentForm() {
+      const t = document.getElementById('edit-logo-title');
+      const s = document.getElementById('edit-logo-subtitle');
+      const b = document.getElementById('edit-hero-badge');
+      const h = document.getElementById('edit-hero-headline');
+      const d = document.getElementById('edit-hero-desc');
+
+      if (t) t.value = siteConfig.logoTitle || 'William';
+      if (s) s.value = siteConfig.logoSubtitle || '';
+      if (b) b.value = siteConfig.heroBadge || '';
+      if (h) h.value = siteConfig.heroHeadline || '';
+      if (d) d.value = siteConfig.heroDescription || '';
+    }
+
+    function handleSaveSiteContent(event) {
+      event.preventDefault();
+      siteConfig.logoTitle = document.getElementById('edit-logo-title').value.trim();
+      siteConfig.logoSubtitle = document.getElementById('edit-logo-subtitle').value.trim();
+      siteConfig.heroBadge = document.getElementById('edit-hero-badge').value.trim();
+      siteConfig.heroHeadline = document.getElementById('edit-hero-headline').value.trim();
+      siteConfig.heroDescription = document.getElementById('edit-hero-desc').value.trim();
+
+      saveConfigToStorage();
+      applySiteConfigUI();
+      showToast('Teks platform berhasil diperbarui!', 'success');
+    }
+
+    function handleCardClick(id) {
+      const item = projectsData.find(p => p.id === id);
+      if (!item) return;
+      if (item.link) {
+        window.open(item.link, '_blank');
+      } else {
+        openScreenshotModal(id);
+      }
+    }
+
+    function openScreenshotModal(id) {
+      const item = projectsData.find(p => p.id === id);
+      if (!item) return;
+
+      document.getElementById('modal-project-title').innerText = item.title;
+      document.getElementById('modal-project-category').innerText = `Kategori • ${item.categoryLabel || 'Profil William'}`;
+      document.getElementById('modal-project-desc').innerText = item.description;
+      document.getElementById('modal-author').innerText = item.author || 'William (Kelas 9C)';
+
+      const mockUrl = document.getElementById('modal-mock-url');
+      if (mockUrl) mockUrl.innerText = item.link || 'https://william.sch.id/student/project';
+
+      const tagsContainer = document.getElementById('modal-tags-container');
+      if (tagsContainer) {
+        tagsContainer.innerHTML = (item.tags || []).map(t => `<span class="px-2.5 py-1 rounded-md bg-slate-200 dark:bg-slate-800 text-slate-700 dark:text-slate-300 text-xs font-medium">${t}</span>`).join('');
+      }
+
+      const previewContent = document.getElementById('modal-preview-content');
+      if (previewContent) {
+        previewContent.innerHTML = `
+          <div class="w-full max-w-md bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl p-6 shadow-2xl text-left">
+            <h5 class="text-base font-bold text-slate-900 dark:text-white mb-2">${item.title}</h5>
+            <p class="text-xs text-slate-600 dark:text-slate-400 mb-4">${item.description}</p>
+            ${item.link ? `<a href="${item.link}" target="_blank" class="px-4 py-2 bg-cyan-500 text-white rounded-xl text-xs font-semibold inline-block">${item.linkText || 'Buka Link Karya'}</a>` : ''}
+          </div>
+        `;
+      }
+
+      const modal = document.getElementById('screenshot-modal');
+      if (modal) {
+        modal.classList.remove('hidden');
+        modal.classList.add('flex');
+      }
+    }
+
+    function closeScreenshotModal() {
+      const modal = document.getElementById('screenshot-modal');
+      if (modal) {
+        modal.classList.add('hidden');
+        modal.classList.remove('flex');
+      }
+    }
+
+    function openAddProjectModal() {
+      document.getElementById('form-edit-id').value = '';
+      document.getElementById('form-modal-title').innerText = 'Tambah Kartu Proyek William';
+      document.getElementById('form-submit-btn').innerText = 'Simpan Data Kartu';
+
+      document.getElementById('form-title').value = '';
+      document.getElementById('form-author').value = 'William (Kelas 9C)';
+      document.getElementById('form-category').value = 'student';
+      document.getElementById('form-link').value = '';
+      document.getElementById('form-link-text').value = 'Buka Tautan Karya';
+      document.getElementById('form-desc').value = '';
+      document.getElementById('form-tags').value = '';
+
+      const modal = document.getElementById('project-form-modal');
+      if (modal) {
+        modal.classList.remove('hidden');
+        modal.classList.add('flex');
+      }
+    }
+
+    function openEditProjectModal(projectId) {
+      const item = projectsData.find(p => p.id === projectId);
+      if (!item) return;
+
+      document.getElementById('form-edit-id').value = item.id;
+      document.getElementById('form-modal-title').innerText = 'Edit Kartu Proyek William';
+      document.getElementById('form-submit-btn').innerText = 'Perbarui Kartu';
+
+      document.getElementById('form-title').value = item.title || '';
+      document.getElementById('form-author').value = item.author || 'William (Kelas 9C)';
+      document.getElementById('form-category').value = item.category || 'student';
+      document.getElementById('form-link').value = item.link || '';
+      document.getElementById('form-link-text').value = item.linkText || 'Buka Tautan Karya';
+      document.getElementById('form-desc').value = item.description || '';
+      document.getElementById('form-tags').value = item.tags ? item.tags.join(', ') : '';
+
+      const modal = document.getElementById('project-form-modal');
+      if (modal) {
+        modal.classList.remove('hidden');
+        modal.classList.add('flex');
+      }
+    }
+
+    function closeProjectFormModal() {
+      const modal = document.getElementById('project-form-modal');
+      if (modal) {
+        modal.classList.add('hidden');
+        modal.classList.remove('flex');
+      }
+    }
+
+    function handleSaveProject(event) {
+      event.preventDefault();
+      const editId = document.getElementById('form-edit-id').value;
+      const title = document.getElementById('form-title').value.trim();
+      const author = document.getElementById('form-author').value.trim() || 'William (Kelas 9C)';
+      const category = document.getElementById('form-category').value;
+      const link = document.getElementById('form-link').value.trim();
+      const linkText = document.getElementById('form-link-text').value.trim() || 'Buka Tautan Karya';
+      const desc = document.getElementById('form-desc').value.trim();
+      const tagsRaw = document.getElementById('form-tags').value;
+
+      const categoryLabels = { student: 'Profil William 9C', lms: 'Learning Space', code: 'Web Coding' };
+      const parsedTags = tagsRaw ? tagsRaw.split(',').map(s => s.trim()).filter(Boolean) : ['William Project'];
+
+      if (editId) {
+        const index = projectsData.findIndex(p => p.id === editId);
+        if (index !== -1) {
+          projectsData[index].title = title;
+          projectsData[index].author = author;
+          projectsData[index].category = category;
+          projectsData[index].categoryLabel = categoryLabels[category] || 'Proyek William';
+          projectsData[index].description = desc;
+          projectsData[index].link = link || null;
+          projectsData[index].linkText = linkText;
+          projectsData[index].tags = parsedTags;
+
+          showToast('Kartu proyek berhasil diperbarui!', 'success');
+        }
+      } else {
+        const newProj = {
+          id: 'proj-' + Date.now(),
+          title,
+          author,
+          category,
+          categoryLabel: categoryLabels[category] || 'Proyek William',
+          badgeColor: 'bg-cyan-500/10 text-cyan-600 dark:text-cyan-400 border-cyan-500/30',
+          description: desc,
+          link: link || null,
+          linkText: linkText,
+          tags: parsedTags
+        };
+        projectsData.unshift(newProj);
+        showToast('Kartu proyek baru berhasil ditambahkan!', 'success');
+      }
+
+      saveProjectsToStorage();
+      renderProjects();
+      renderAdminCardsList();
+      closeProjectFormModal();
+    }
+
+    function deleteProject(id) {
+      if (confirm('Apakah Anda yakin ingin menghapus kartu ini?')) {
+        projectsData = projectsData.filter(p => p.id !== id);
+        saveProjectsToStorage();
+        renderProjects();
+        renderAdminCardsList();
+        showToast('Kartu proyek berhasil dihapus', 'info');
+      }
+    }
+
+    function exportDataJSON() {
+      const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify({
+        projects: projectsData,
+        config: siteConfig
+      }, null, 2));
+      const downloadAnchor = document.createElement('a');
+      downloadAnchor.setAttribute("href", dataStr);
+      downloadAnchor.setAttribute("download", `william_portfolio_backup_${Date.now()}.json`);
+      document.body.appendChild(downloadAnchor);
+      downloadAnchor.click();
+      downloadAnchor.remove();
+      showToast('Data berhasil di-export ke JSON', 'success');
+    }
+
+    function importDataJSONPrompt() {
+      const jsonText = prompt('Paste teks JSON cadangan di sini:');
+      if (jsonText) {
+        try {
+          const parsed = JSON.parse(jsonText);
+          if (parsed.projects && Array.isArray(parsed.projects)) {
+            projectsData = parsed.projects;
+            saveProjectsToStorage();
+          }
+          if (parsed.config) {
+            siteConfig = { ...siteConfig, ...parsed.config };
+            saveConfigToStorage();
+          }
+          renderProjects();
+          renderAdminCardsList();
+          showToast('Data berhasil di-import!', 'success');
+        } catch (e) {
+          alert('Format JSON tidak valid!');
+        }
+      }
+    }
+
+    window.toggleTheme = toggleTheme;
+    window.toggleAuthModal = toggleAuthModal;
+    window.closeLoginModal = closeLoginModal;
+    window.handleAdminLogin = handleAdminLogin;
+    window.togglePasswordVisibility = togglePasswordVisibility;
+    window.filterProjects = filterProjects;
+    window.openAdminPanel = openAdminPanel;
+    window.closeAdminPanel = closeAdminPanel;
+    window.switchAdminTab = switchAdminTab;
+    window.updateLayoutColumns = updateLayoutColumns;
+    window.updateCardRadius = updateCardRadius;
+    window.moveCardOrder = moveCardOrder;
+    window.duplicateProject = duplicateProject;
+    window.handleSaveSiteContent = handleSaveSiteContent;
+    window.openAddProjectModal = openAddProjectModal;
+    window.resetProjectsToDefault = resetProjectsToDefault;
+    window.handleCardClick = handleCardClick;
+    window.openScreenshotModal = openScreenshotModal;
+    window.closeScreenshotModal = closeScreenshotModal;
+    window.openEditProjectModal = openEditProjectModal;
+    window.closeProjectFormModal = closeProjectFormModal;
+    window.handleSaveProject = handleSaveProject;
+    window.deleteProject = deleteProject;
+    window.exportDataJSON = exportDataJSON;
+    window.importDataJSONPrompt = importDataJSONPrompt;
+
+    window.onload = function() {
+      initTheme();
+      loadStorageData();
+      renderProjects();
+    };
+  </script>
+</body>
+</html>
